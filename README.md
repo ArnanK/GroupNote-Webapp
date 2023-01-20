@@ -35,10 +35,10 @@ envname\scripts\activate
 --> Install the requirements :
 ```bash
 
-pip install django 4.1.2
+pip install django 
 pip install djangorestframework
 pip install pillow
-pip install django-crispy-forms-1.14.0
+pip install django-crispy-forms
 
 ```
 
