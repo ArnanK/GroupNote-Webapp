@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+
+{%block content%}
+
+<div>
+    <form method="POST" action="">
+        {% csrf_token%}
+        <div>
+            <!--Displays Error Messages-->
+            <div>
+                {% if messages %}
+                {%for message in messages%}    
+                <p>{{message}}</p>
+                {%endfor%}
+                {% endif %}    
+            </div>
+           
+            <input type="username" name="member" list="user-list" />
+            <datalist id="user-list">
+                <select>
+                    {% for user in users%}    
+                    <option value="{{user.username}}">{{user.username}}</option>
+                    {% endfor %}
+                </select>
+            </datalist>
+        </div>
+
+        <div>
+            <button type="submit">Add</button>
+        </div>
+
+    </form>
+</div>
+
+{%endblock content%}

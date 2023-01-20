@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+
+{%block content%}
+    <div>
+        
+        {% if note and request.user == note.user %}
+        
+        <li class="dropdown">
+            <a role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle">Note Options</button>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'share-note' note.id %}">Share</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'delete-note' note.id %}">Delete</a></li>
+            </ul>
+        </li>
+        {% endif %}
+
+        <form method = "POST" action = "">
+            {% csrf_token %}
+                <div>
+                    {{form.title|as_crispy_field}}
+                </div>
+                
+                <div>
+                    <label for="note_tag">Tag</label>
+                    <input type="text" value="{{note.tag.name}}" name="tag" list="tag-list" class="form-control"/>
+                    <datalist id="tag-list">
+                        <select id="note_tag">
+                            {% for tag in tags%}    
+                            <option value="{{tag.name}}">{{tag.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </datalist>
+
+                </div>
+                
+                <div>                    
+                    {{form.body|as_crispy_field}}
+                </div>    
+
+
+                <a href="{%url 'note-page'%}">Go Back</a>
+                {% if request.user == note.user %}
+                <button type="submit" class="theme-button">Save Note</button>
+                {% endif %}
+        </form>
+        
+    </div>
+    
+{%endblock%}

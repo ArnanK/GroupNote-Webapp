@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="top-gap-layout">
+<main class="profile-page layout layout--3">
+    <div class="container">
+      
+  
+      <!-- Room List Start -->
+      <div class="roomList">
+        <div class="profile">
+          <div class="profile__avatar">
+            <div class="avatar avatar--large active">
+              <img src="{{user.avatar.url}}" />
+            </div>
+          </div>
+          <div class="profile__info">
+            <h3>{{user.name}}</h3>
+            <p>@{{user.username}}</p>
+            {% if request.user == user %}
+            <a href="{% url 'update-profile' %}" class="theme-button">Edit Profile</a>
+            {% endif %}
+          </div>
+          <div class="profile__about">
+            <h4>About</h4>
+            <p>
+              {{user.bio}}
+            </p>
+          </div>
+        </div>
+  
+        
+        
+  
+  
+      </div>
+      
+    </div>
+</main>
+</div>
+
+{% endblock content %}

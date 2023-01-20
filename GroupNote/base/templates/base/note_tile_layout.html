@@ -1,0 +1,21 @@
+{% for note in notes%}
+                
+            {% if request.user == note.user or request.user in note.recipients.all %}
+                <div id="all" class="note-box" style="cursor:pointer;" onclick='location.href="update-note/{{note.id}}";'>
+                    
+                    <div><h4>{{note.title}}</h4></div>
+
+                    {% if request.user != note.user %}
+                    <div><small>Shared From: {{note.user}}</small></div>
+                    {% endif %}
+
+                    <div><small>Tag: {{note.tag}}</small></div>
+                    
+                    <div>
+                        <p>{{note.body}}</p>    
+                    </div>
+                    
+                </div>
+            {% endif %}
+        
+{% endfor %}

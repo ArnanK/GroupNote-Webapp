@@ -1,0 +1,53 @@
+<style>
+    .profile-picture{
+        width: 40px;
+
+    }
+
+    .left-navbar{
+      align-items: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+
+</style>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div class="navbar-outline">
+          <li class="left-navbar">
+              <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'note-page' %}">Notes</a>
+
+          </li>
+          
+          <li name="Space"></li>
+          
+          {% if request.user.is_authenticated %}
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{{request.user.avatar.url}}" class="profile-picture">
+          </a>
+          <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'user-profile' pk=request.user.id %}">Profile</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+          </li>   
+          {% else %}
+
+          <a href="{% url 'login' %}"><button>Login</button></a>
+
+          {%endif%}
+
+        </div>
+        
+      </ul>
+      
+    </div>
+
+  </div>
+</nav>

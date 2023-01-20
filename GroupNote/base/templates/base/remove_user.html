@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        <p>{{room.name}}</p>
+        <hr>
+        <p>Are you sure you want to remove "{{participant}}" from "{{room.name}}"?</p>
+        <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+        <input type="submit" value="Confirm">
+    </form>
+
+{% endblock %}

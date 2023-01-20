@@ -1,0 +1,144 @@
+{% extends 'main.html' %}
+
+<style>
+
+</style>
+
+ 
+{% block content%}
+
+<div>
+
+    <div class="top-gap-layout">
+        
+        <div class="note-settings-container">
+            
+            <a href="{%url 'create-note'%}"><button class="theme-button">Add Note</button></a>
+            
+            <li class="dropdown">
+                <a class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter
+                </a>
+                <ul class="dropdown-menu" id="dropdown-option">
+                    <li><a class="dropdown-item">All</a></li>
+                    <li><a class="dropdown-item">Owned by me</a></li>
+                    <li><a class="dropdown-item">Not owned by me</a></li>
+                </ul>
+            </li>
+            
+                       
+        </div>
+
+        <div class="tile-layout" id="notes-tile-layout">
+            {% include 'base/note_tile_layout.html' %}
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+    $(".dropdown-item").click(function(){
+        $.ajax({
+            url:'',
+            type: 'get',
+            data: {
+                dropdown_text: $(this).text()
+            },
+    
+            success: function(response){
+
+            },
+            error: function(response){
+                alert("An error occured");
+            }
+
+        });
+        refreshTiles($(this).text());
+    });
+});
+
+function refreshTiles(dropdown_text){
+    var wrapper = document.getElementById('notes-tile-layout');
+    var url = 'http://127.0.0.1:8000/api/notes/';
+
+    if(dropdown_text == 'All'){
+        wrapper.innerHTML = `
+        {% for note in notes%}
+                
+            {% if request.user == note.user or request.user in note.recipients.all %}
+                <div id="all" class="note-box" style="cursor:pointer;" onclick='location.href="update-note/{{note.id}}";'>
+                    
+                    <div><h4>{{note.title}}</h4></div>
+                    {% if request.user != note.user %}
+                    <div><small>Shared From: {{note.user}}</small></div>
+                    {% endif %}
+
+                    <div><small>Tag: {{note.tag}}</small></div>
+                    
+                    <div>
+                        <p>{{note.body}}</p>    
+                    </div>
+                    
+                </div>
+            {% endif %}
+        
+        {% endfor %}
+        `
+    }else if (dropdown_text == 'Owned by me'){
+        wrapper.innerHTML = `
+        {% for note in notes%}
+                
+            {% if request.user == note.user %}
+                <div id="all" class="note-box" style="cursor:pointer;" onclick='location.href="update-note/{{note.id}}";'>
+                    
+                    <div><h4>{{note.title}}</h4></div>
+
+                    <div><small>Tag: {{note.tag}}</small></div>
+                    
+                    <div>
+                        <p>{{note.body}}</p>    
+                    </div>
+                    
+                </div>
+            {% endif %}
+        {% endfor %}
+        `;
+    }else if(dropdown_text == 'Not owned by me'){
+        wrapper.innerHTML = `
+        {% for note in notes%}
+            {% if request.user in note.recipients.all %}
+                <div id="all" class="note-box" style="cursor:pointer;" onclick='location.href="update-note/{{note.id}}";'>
+                    
+                    <div><h4>{{note.title}}</h4></div>
+
+                    {% if request.user != note.user %}
+                    <div><small>Shared From: {{note.user}}</small></div>
+                    {% endif %}
+
+                    <div><small>Tag: {{note.tag}}</small></div>
+                    
+                    <div>
+                        <p>{{note.body}}</p>    
+                    </div>
+                    
+                </div>
+            {% endif %}
+        {% endfor %}
+        `;
+    }
+
+    fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data){
+        console.log('Data:', data);
+    });
+}
+
+
+</script>
+
+ {% endblock content%}

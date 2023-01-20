@@ -1,0 +1,40 @@
+<style>
+    .search-bar-layout{
+    margin-left: 20px;
+    margin-bottom: 18px;
+    }
+</style>
+
+<div class="top-gap-layout">
+<div class="search-bar-layout">
+    <form method="GET" action ="{% url 'home' %}">
+        <input type="text" name="q" placeholder="Search Rooms...">
+    </form>
+</div>
+<div class="tile-layout">
+    <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Create a group chat</h5>
+          <p class="card-text">Create a community where you can get to work</p>
+          <a href="{% url 'create-room' %}"><button type="button" class="theme-button">Create room</button></a>
+        </div>
+    </div>
+    
+    {% for room in rooms %}
+        
+        {% if request.user == room.host or room.privacy == "public" or request.user in room.participants.all%}
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">{{room.name}}</h5>
+            <img src="{{room.host.avatar.url}}" class="profile-picture"/>
+            <small class="card-text"><a href="{% url 'user-profile' room.host.id %}">@{{room.host.username}}</a></small>
+            <p class="card-text">{{room.description}}</p>
+            <a href="{% url 'room' room.id%}"><button type="button" class="theme-button">Open room</button></a>
+            </div>
+        </div>
+        {% endif %}
+
+        
+    {% endfor %} 
+</div>
+</div>
